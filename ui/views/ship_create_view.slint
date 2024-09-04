@@ -1,0 +1,271 @@
+import {VerticalBox, HorizontalBox, ComboBox, Button, SpinBox} from "std-widgets.slint";
+
+import { Icons } from "../widgets/styling.slint";
+
+export struct ShipBuilderData {
+    ship-name:string,
+    ship-hull-type:string,
+    ship-class:string,
+    ship-hp:int,
+    ship-crew-min:int,
+    ship-crew-max:int,
+    ship-armor:int,
+    ship-ac:int,
+    ship-power:int,
+    ship-mass:int,
+    ship-npc-cp:int,
+    ship-speed:int,
+    weapon-one:string,
+    fitting-one:string,
+}
+
+export global ShipBuilderAdapter{
+    callback create(ShipBuilderData);
+    
+    in-out property <ShipBuilderData> ship;
+}
+export component ShipBuilderView{
+    in-out property <ShipBuilderData> model: ShipBuilderAdapter.ship;
+
+    VerticalBox {
+        HorizontalBox {
+            VerticalBox{
+                HorizontalBox {
+                    Text {
+                        text:"Ship Name:";
+                        vertical-alignment: center;
+                    }
+                    Rectangle {
+                        border-radius: 5px;
+                        background: #70a094;
+                        ship-name-input := TextInput {
+                            x: parent.x - parent.width / 3;
+                            vertical-alignment: center;
+                            text: model.ship-name;
+                            
+                            edited() => {
+                                model.ship-name = self.text;
+                            }
+                        }
+                    }
+                    
+                }
+                HorizontalBox {
+                    ship-class-label := Text{
+                        text: "Ship Class:";
+                        vertical-alignment: center;
+                    }
+                    ship-class-input := ComboBox {
+                        model: [
+                            "Frigate",
+                            "Cruiser",
+                            "Capital",
+                        ];
+                        selected(new-value) => {
+                            model.ship-class = new-value;
+                        }
+                    }
+                    ship-class-add-new := Button {
+                        icon: Icons.add;
+                    }
+                }
+                HorizontalBox {
+                    ship-hull-label := Text{
+                        text: "Ship Hull:";
+                        vertical-alignment: center;
+                    }
+                    ship-hull-input := ComboBox {
+                        model: [
+                            "Strike Fighter",
+                            "Corvette",
+                            "Free Merchant",
+                            "Heavy Frigate",
+                            "Battleship",
+                            "Carrier",
+                        ];
+                        selected(new-value) => {
+                            model.ship-hull-type = new-value;
+                        }
+                    }
+                    ship-hull-add-new := Button {
+                        icon: Icons.add;
+                    }
+                }
+            }
+            HorizontalBox {
+                Text {
+                    text: "Ship Stats:";
+                }
+                VerticalBox {   
+                    HorizontalBox {
+                        ship-hp-label := Text {
+                            text: "HP:";
+                            vertical-alignment: center;
+                        }
+                        ship-hp-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-hp = new-value;
+                            }
+                        }
+                    }
+                    HorizontalBox {
+                        ship-ac-label := Text {
+                            text: "AC:";
+                            vertical-alignment: center;
+                        }
+                        ship-ac-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            
+                        }
+                    }
+                    HorizontalBox {
+                        ship-armor-label := Text {
+                            text: "Armor:";
+                            vertical-alignment: center;
+                        }
+                        ship-armor-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-armor = new-value;
+                            }
+                        }
+                    }
+                    HorizontalBox {
+                        ship-speed-label := Text {
+                            text: "Speed:";
+                            vertical-alignment: center;
+                        }
+                        ship-speed-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-speed = new-value;
+                            }
+                        }
+                    }
+                }
+                VerticalBox {   
+                    HorizontalBox {
+                        ship-power-label := Text {
+                            text: "Power:";
+                            vertical-alignment: center;
+                        }
+                        ship-power-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-power = new-value;
+                            }
+                        }
+                    }
+                    HorizontalBox {
+                        ship-mass-label := Text {
+                            text: "Mass:";
+                            vertical-alignment: center;
+                        }
+                        ship-mass-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-mass = new-value;
+                            }
+                        }
+                    }
+                    HorizontalBox {
+                        ship-crew-label := Text {
+                            text: "Crew:";
+                            vertical-alignment: center;
+                        }
+                        ship-crew-minimum-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-crew-min = new-value;
+                            }
+                        }
+                        Text {
+                            text: "/";
+                            vertical-alignment: center;
+                        }
+                        ship-crew-max-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-crew-max = new-value;
+                            }
+                        }
+                    }
+                    HorizontalBox {
+                        ship-npc-cp-label := Text {
+                            text: "NPC CP:";
+                            vertical-alignment: center;
+                        }
+                        ship-npc-cp-input := SpinBox {
+                            value: 0;
+                            minimum: 0;
+                            height: 25px;
+                            edited(new-value) => {
+                                model.ship-npc-cp = new-value;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Text {
+            text: "Weapons";
+        }
+        HorizontalBox {
+            weapon-one-label := Text {
+                text: "Weapon 1";
+                vertical-alignment: center;
+            }
+            weapon-one-input := ComboBox {
+                model: ["Multifocal Laser", "Sandthrower", "Reaper Battery"];
+                selected(new-value) => {
+                    model.weapon-one = new-value;
+                }
+            }
+        }
+        Button {
+            icon: Icons.add;
+        }
+        HorizontalBox {
+            fitting-one-label := Text {
+                text: "Fitting 1";
+                vertical-alignment: center;
+            }
+            fitting-one-input := ComboBox {
+                model: ["Spike Drive-1", "Fuel Scoops", "Fuel Bunker"];
+                selected(new-value) => {
+                    model.fitting-one = new-value;
+                }
+            }
+        }
+        Button {
+            icon: Icons.add;
+        }
+        create-ship-button := Button {
+            primary: true;
+            text: "Create Ship";
+            clicked => {
+                root.create(model);
+            }
+        }
+    }
+    function create(new-ship:ShipBuilderData){
+        ShipBuilderAdapter.create(new-ship);
+    }
+}

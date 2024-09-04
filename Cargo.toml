@@ -1,0 +1,12 @@
+[package]
+name = "swn_helper"
+version = "0.1.0"
+edition = "2021"
+build = "build.rs"
+
+[dependencies]
+slint = "1.7.2"
+rand = "0.8.5"
+
+[build-dependencies]
+slint-build = "1.7.2"
