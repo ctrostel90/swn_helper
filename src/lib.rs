@@ -23,5 +23,8 @@ fn init() -> ui::MainWindow{
     ui::ship_edit_adapter::connect_ship_list_controller(&view_handle, ship_list_controller.clone());
     ui::ship_list_adapter::connect_ship_edit_controller(&view_handle, &ship_list_controller, &ship_edit_controller);
 
+    let menu_controller = mvc::MenuController::new();
+    ui::menu_adapter::connect_ship_list_controller(&view_handle, menu_controller, ship_list_controller);
+    
     view_handle
 }

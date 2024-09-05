@@ -33,6 +33,10 @@ impl ShipListController{
     pub fn create_ship(&self, new_ship:mvc::models::ShipModel) {
         self.ship_model.push_ship(new_ship);
     }
+
+    pub fn get_all_ships(&self) -> Vec<mvc::ShipModel>{
+        self.ship_model.get_all_ships()
+    }
 }
 
 #[derive(Clone)]
@@ -63,6 +67,10 @@ impl ShipModel {
         }
 
         self.notify.row_added(self.row_count() - 1, 1);
+    }
+
+    fn get_all_ships(&self) -> Vec<mvc::ShipModel>{
+        self.repo.get_all_ships()
     }
 }
 

@@ -1,7 +1,6 @@
-// Copyright © SixtyFPS GmbH <info@slint.dev>
-// SPDX-License-Identifier: MIT
+use serde::{Serialize,Deserialize};
 
-#[derive(Clone, Default, Debug, PartialEq)]
+#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ShipModel {
     pub name: String,
     pub hull: String,

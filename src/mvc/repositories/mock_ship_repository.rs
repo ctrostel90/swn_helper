@@ -36,4 +36,11 @@ impl traits::ShipRepository for MockShipRepository {
         self.ships.borrow_mut().push(ship);
         true
     }
+    fn get_all_ships(&self) -> Vec<mvc::ShipModel> {
+        let mut tmp = Vec::<mvc::ShipModel>::new();
+        for index in 0..self.ship_count(){
+            tmp.push(self.get_ship(index).unwrap());
+        }
+        tmp
+    }
 }

@@ -5,4 +5,5 @@ pub trait ShipRepository {
     fn get_ship(&self, index: usize) -> Option<mvc::ShipModel>;
     fn remove_ship(&self, index: usize) -> bool;
     fn push_ship(&self, task: mvc::ShipModel) -> bool;
+    fn get_all_ships(&self) -> Vec<mvc::ShipModel>;
 }
