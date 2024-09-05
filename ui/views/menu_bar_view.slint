@@ -1,0 +1,46 @@
+
+import { Button } from "std-widgets.slint";
+
+export global MenuBarAdapter{
+    callback menu-clicked;
+    callback save-clicked;
+    callback load-clicked;
+}
+
+export component MenuBar {
+    HorizontalLayout {
+        width: parent.width;
+        height: 35px;
+        spacing: 5px;
+        Button {
+            width: 75px;
+            text: "Menu";
+            clicked => {
+                menu-clicked();
+            }
+        }
+        Button {
+            width: 75px;
+            text: "Save";
+            clicked => {
+                save-clicked();
+            }
+        }
+        Button {
+            width: 75px;
+            text: "Load";
+            clicked => {
+                load-clicked();
+            }
+        }
+    }
+    function menu-clicked(){
+        MenuBarAdapter.menu-clicked();
+    }
+    function save-clicked(){
+        MenuBarAdapter.save-clicked();
+    }
+    function load-clicked(){
+        MenuBarAdapter.load-clicked();
+    }
+}

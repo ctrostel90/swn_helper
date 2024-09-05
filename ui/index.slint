@@ -1,16 +1,21 @@
 import { ShipBuilderAdapter, ShipBuilderView} from "views/ship_create_view.slint";
 import { ShipListView, ShipListAdapter } from "widgets/ship_list_view.slint";
-export { ShipBuilderAdapter , ShipListAdapter}
+import {MenuBar, MenuBarAdapter } from "views/menu_bar_view.slint";
 
+export { ShipBuilderAdapter , ShipListAdapter}
+export { MenuBarAdapter }
 export component MainWindow inherits Window{
     title: "SWN Ship Editor";
     //width: 1200px;
-    HorizontalLayout {
-        ShipListView {
-            width: 400px;
-        }
-        ShipBuilderView {
+    VerticalLayout {
+        MenuBar {}
+        HorizontalLayout {
+            ShipListView {
+                width: 400px;
+            }
+            ShipBuilderView {
 
+            }
         }
     }
 }
