@@ -22,6 +22,10 @@ impl ShipListController{
         ModelRc::new(self.ship_model.clone())
     }
 
+    pub fn get_ship(&self, index: usize) -> Option<mvc::ShipModel>{
+        self.ship_model.get_ship(index)
+    }
+
     pub fn remove_ship(&self, index: usize) {
         self.ship_model.remove_ship(index);
     }
@@ -42,6 +46,9 @@ impl ShipModel {
         Self { repo: Rc::new(repo), notify: Rc::new(Default::default()) }
     }
 
+    fn get_ship(&self,index:usize) -> Option<mvc::ShipModel>{
+        self.repo.get_ship(index)
+    }
     fn remove_ship(&self, index: usize) {
         if !self.repo.remove_ship(index) {
             return;

@@ -2,12 +2,12 @@ use slint::*;
 use std::rc::Rc;
 
 use crate::{
-    mvc::{ShipListController, ShipModel},
+    mvc::{ShipEditController, ShipListController, ShipModel},
     ui,
 };
 
 // a helper function to make adapter and controller connection a little bit easier
-pub fn connect_with_controller(
+fn connect_with_controller(
     view_handle: &ui::MainWindow,
     controller: &ShipListController,
     connect_adapter_controller: impl FnOnce(ui::ShipListAdapter, ShipListController) + 'static,
@@ -22,7 +22,6 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipListController) {
         .global::<ui::ShipListAdapter>()
         .set_ships(Rc::new(MapModel::new(controller.ship_model(), map_ship_to_item)).into());
 
-   
     connect_with_controller(view_handle, &controller, {
         move |adapter, controller| {
             adapter.on_remove_ship(move |index| {
@@ -32,6 +31,26 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipListController) {
     });
 }
 
+fn connect_with_ship_edit_controller(
+    view_handle: &ui::MainWindow,
+    controller: &ShipListController,
+    ship_edit_controller: &ShipEditController,
+    connect_adapter_controller: impl FnOnce(ui::ShipListAdapter, ShipListController, ShipEditController) + 'static,
+) {
+    connect_adapter_controller(view_handle.global::<ui::ShipListAdapter>(), controller.clone(), ship_edit_controller.clone());
+}
+pub fn connect_ship_edit_controller(
+    view_handle: &ui::MainWindow,
+    controller: &ShipListController,
+    ship_edit_controller: &ShipEditController,){
+        connect_with_ship_edit_controller(view_handle, &controller, &ship_edit_controller, {
+        move |adapter, controller,ship_edit_controller| {
+            adapter.on_edit_ship(move |index| {
+                ship_edit_controller.start_editing_ship(controller.get_ship(index as usize).unwrap());
+            })
+        }
+        });
+}
 fn map_ship_to_item(ship: ShipModel) -> ui::ShipListViewItem {
     ui::ShipListViewItem {
         ship_name: ship.name.into(),

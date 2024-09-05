@@ -21,8 +21,13 @@ export struct ShipBuilderData {
 
 export global ShipBuilderAdapter{
     callback create(ShipBuilderData);
+    callback set_ship(ShipBuilderData);
     
     in-out property <ShipBuilderData> ship;
+
+    set_ship(new-ship) =>{
+        ship = new-ship;
+    }
 }
 export component ShipBuilderView{
     in-out property <ShipBuilderData> model: ShipBuilderAdapter.ship;
@@ -103,7 +108,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-hp-input := SpinBox {
-                            value: 0;
+                            value: model.ship-hp;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -117,7 +122,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-ac-input := SpinBox {
-                            value: 0;
+                            value: model.ship-ac;
                             minimum: 0;
                             height: 25px;
                             
@@ -129,7 +134,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-armor-input := SpinBox {
-                            value: 0;
+                            value: model.ship-armor;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -143,7 +148,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-speed-input := SpinBox {
-                            value: 0;
+                            value: model.ship-speed;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -159,7 +164,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-power-input := SpinBox {
-                            value: 0;
+                            value: model.ship-power;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -173,7 +178,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-mass-input := SpinBox {
-                            value: 0;
+                            value: model.ship-mass;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -187,7 +192,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-crew-minimum-input := SpinBox {
-                            value: 0;
+                            value: model.ship-crew-min;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -199,7 +204,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-crew-max-input := SpinBox {
-                            value: 0;
+                            value: model.ship-crew-max;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {
@@ -213,7 +218,7 @@ export component ShipBuilderView{
                             vertical-alignment: center;
                         }
                         ship-npc-cp-input := SpinBox {
-                            value: 0;
+                            value: model.ship-npc-cp;
                             minimum: 0;
                             height: 25px;
                             edited(new-value) => {

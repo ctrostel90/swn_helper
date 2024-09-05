@@ -11,7 +11,7 @@ export struct ShipListViewItem{
 }
 
 export component ShipListViewItemDelegate{
-    callback  remove;
+    callback remove;
     callback edit;
 
     in property <string> ship-name <=> ship-name-label.text;
@@ -99,7 +99,7 @@ export global ShipListAdapter{
 ];
 
     callback remove-ship(int);
-    callback edit-ship();
+    callback edit-ship(int);
 
     function ship(index:int) -> ShipListViewItem{
         root.ships[index]
@@ -124,10 +124,10 @@ export component ShipListView inherits ListView {
         ship-crew-max: item.ship-crew-max;
 
         edit => {
-            root.edit(index);
+            ShipListAdapter.edit-ship(index);
         }
         remove => {
-            root.remove(index);
+            ShipListAdapter.remove-ship(index)
         }
     }
 }

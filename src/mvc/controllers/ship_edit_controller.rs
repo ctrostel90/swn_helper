@@ -1,15 +1,29 @@
 use std::rc::Rc;
 
+use crate::mvc::ShipModel;
+
+use crate::Callback;
 //use crate::mvc::traits::ShipModel;
 
 #[derive(Clone)]
 pub struct ShipEditController{
-    tmp: String,
-    // ship: Rc<dyn ShipModel>,
+    start_edit_ship_callback:Rc<Callback<ShipModel,()>>,
 }
 
 impl ShipEditController{
     pub fn new() -> Self{
-        Self{ tmp:"Test".into()}
+        Self{ 
+            start_edit_ship_callback: Rc::new(Callback::default())
+        }
+    }
+
+    pub fn start_editing_ship(&self, new_ship:ShipModel){
+        self.start_edit_ship_callback.invoke(&new_ship);
+    }
+
+    pub fn on_start_editing_ship(&self, mut callback: impl FnMut(&ShipModel) + 'static){
+        self.start_edit_ship_callback.on(move|new_ship|{
+            callback(new_ship);
+        });
     }
 }
