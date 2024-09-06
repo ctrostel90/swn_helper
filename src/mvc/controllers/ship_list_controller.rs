@@ -6,6 +6,7 @@ use slint::ModelRc;
 use slint::ModelTracker;
 
 use crate::mvc;
+use crate::mvc::MockShipRepository;
 
 #[derive(Clone)]
 pub struct ShipListController {
@@ -36,6 +37,13 @@ impl ShipListController{
 
     pub fn get_all_ships(&self) -> Vec<mvc::ShipModel>{
         self.ship_model.get_all_ships()
+    }
+
+    //TODO: Return a result probably
+    pub fn set_ships(&self,new_ship_list:Vec<mvc::ShipModel>) {
+        let _ = new_ship_list.iter().map(|ship|{
+            self.ship_model.push_ship(ship.clone());
+        });
     }
 }
 
@@ -72,6 +80,7 @@ impl ShipModel {
     fn get_all_ships(&self) -> Vec<mvc::ShipModel>{
         self.repo.get_all_ships()
     }
+
 }
 
 impl Model for ShipModel {

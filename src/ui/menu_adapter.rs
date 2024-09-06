@@ -25,6 +25,14 @@ pub fn connect_ship_list_controller(view_handle: &ui::MainWindow, controller: Me
         }
     });
 
+    connect_with_controller_and_ship_list(view_handle, &controller, &ship_list_controller, {
+        move |adapter, controller, ship_list_controller,| {
+            adapter.on_load_clicked(move || {
+                controller.load_ship_list(); 
+            });
+        }
+    });
+
 }
 
 fn map_ship_data_to_ship_model(ship_data: ui::ShipBuilderData) -> ShipModel{

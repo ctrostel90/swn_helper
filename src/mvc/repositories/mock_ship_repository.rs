@@ -43,4 +43,9 @@ impl traits::ShipRepository for MockShipRepository {
         }
         tmp
     }
+
+    fn clear_ships(&self) -> bool {
+        self.ships.borrow_mut().clear();
+        true
+    }
 }

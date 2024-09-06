@@ -2,7 +2,7 @@ use slint::*;
 use std::rc::Rc;
 
 use crate::{
-    mvc::{ShipEditController, ShipListController, ShipModel},
+    mvc::{MenuController, ShipEditController, ShipListController, ShipModel},
     ui,
 };
 
@@ -51,6 +51,33 @@ pub fn connect_ship_edit_controller(
         }
         });
 }
+
+fn connect_with_menu_controller(
+    view_handle: &ui::MainWindow,
+    controller: &ShipListController,
+    menu_controller: &MenuController,
+    connect_adapter_controller: impl FnOnce(ui::ShipListAdapter, ShipListController, MenuController) + 'static,
+) {
+    connect_adapter_controller(view_handle.global::<ui::ShipListAdapter>(), controller.clone(),menu_controller.clone());
+}
+
+// one place to implement connection between adapter (view) and controller
+pub fn connect_menu_controller(view_handle: &ui::MainWindow, controller: ShipListController, menu_controller: MenuController) {
+    // sets a mapped list of the task items to the ui
+    menu_controller.on_load_ship_list({
+        move |new_ship_list|{
+            //I'm POSITIVE this is not a good way to do this but, here we are
+            for index in 0..controller.ship_model().row_count(){
+                controller.remove_ship(index);
+            }
+            for index in 0..new_ship_list.len(){
+                controller.create_ship(new_ship_list[index].clone());
+            }
+        }
+    });
+}
+
+
 fn map_ship_to_item(ship: ShipModel) -> ui::ShipListViewItem {
     ui::ShipListViewItem {
         ship_name: ship.name.into(),
