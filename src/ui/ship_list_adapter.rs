@@ -67,9 +67,11 @@ pub fn connect_menu_controller(view_handle: &ui::MainWindow, controller: ShipLis
     menu_controller.on_load_ship_list({
         move |new_ship_list|{
             //I'm POSITIVE this is not a good way to do this but, here we are
+            //Remove all the ships
             for index in 0..controller.ship_model().row_count(){
                 controller.remove_ship(index);
             }
+            //add all the new ships
             for index in 0..new_ship_list.len(){
                 controller.create_ship(new_ship_list[index].clone());
             }

@@ -1,0 +1,153 @@
+import { StandardTableView, VerticalBox, ListView, Button } from "std-widgets.slint";
+import { Icons } from "styling.slint";
+
+export struct ShipWeaponListViewItem{
+    weapon-name:string,
+    weapon-cost:int,
+    weapon-damage:string,
+    weapon-power:int,
+    weapon-mass:int,
+    weapon-hard-point-count:int,
+    weapon-class:string,
+    weapon-tech-level:int,
+    weapon-qualities:string,
+}
+
+component TableView inherits Rectangle {
+    in property <[string]> columns;
+    in property <[[string]]> values;
+
+    in property <color> row-color-one;
+    in property <color> row-color-two;
+    in property <color> column-background;
+    in property <bool> editable:true;
+
+    callback new-item; 
+    callback row-selected(int);
+
+    private property <length> e: self.width / root.columns.length;
+    in-out property <[length]> column_sizes: [
+        root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e,
+        root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e,
+        root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e, root.e,
+    ];
+
+    VerticalBox {
+        padding: 5px;
+        HorizontalLayout {
+            padding: 5px; spacing: 5px;
+            vertical-stretch: 0;
+            for title[idx] in root.columns : HorizontalLayout {
+                spacing: 5px;
+                width: root.column_sizes[idx];
+                Rectangle {
+                    border-radius: 5px;
+                    height: 20px;
+                    background: column-background;
+                    Text { 
+                        font-weight: 600;
+                        overflow: elide; text: title; 
+                    }
+                }
+                
+                Rectangle {
+                    width: 1px;
+                    background: gray;
+                    TouchArea {
+                        width: 10px;
+                        x: (parent.width - self.width) / 2;
+                        property <length> cached;
+                        pointer-event(event) => {
+                            if (event.button == PointerEventButton.left && event.kind == PointerEventKind.down) {
+                                self.cached = root.column_sizes[idx];
+                            }
+                        }
+                        moved => {
+                            if (self.pressed) {
+                                root.column_sizes[idx] += (self.mouse-x - self.pressed-x);
+                                if (root.column_sizes[idx] < 0) {
+                                    root.column_sizes[idx] = 0;
+                                }
+                            }
+                        }
+                        mouse-cursor: ew-resize;
+                    }
+                }
+            }
+        }
+        ListView {
+            for r[idx-outer] in root.values : Rectangle{
+                background: Math.mod(idx-outer,2)==0? row-color-one:row-color-two;
+                HorizontalLayout {
+                    padding: 5px;
+                    spacing: 5px;
+                    for t[idx] in r : HorizontalLayout {
+                        width: root.column_sizes[idx];
+                        TouchArea {
+                            height: 15px;
+                            TextInput { 
+                                horizontal-alignment: idx!=0 ? center: left;
+                                text: t; 
+                                enabled: root.editable;
+                            }
+                            clicked => {
+                                root.row-selected(idx-outer);
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        Button {
+            icon: Icons.add;
+            width: parent.width;
+            clicked => {
+                root.new-item();
+            }
+        }
+    }
+}
+
+export component ShipWeaponTableView inherits TableView {
+    in property <[[ShipWeaponListViewItem]]> model;
+    background: #5d5179;
+    border-color: #4f5e85;
+    border-width: 2px;
+    border-radius: 2px;
+    width: 865px;
+    height: 150px;
+    row-color-one: #4f5e85;
+    row-color-two: #4f759b;
+    column-background:  #728c91;
+    column_sizes: [
+        200px,
+        100px,
+        70px,
+        70px,
+        60px,
+        80px,
+        70px,
+        60px,
+        100px,
+    ];
+    columns: [
+        "Name",
+        "Cost",
+        "Damage",
+        "Power",
+        "Mass",
+        "HP Count",
+        "Class",
+        "TL",
+        "Qualities",
+    ];
+    values:[
+        ["Multifocal Laser",100000, "1d4", 5, 1, 1, "Fighter", 4, "AP20"],
+        ["Reaper Battery",100000,"3d4",4,1,1,"Fighter",4,"Clumsy"],
+        ["Fractal Impact Charge",200000,"2d6",5,1,1,"Fighter",4,"AP15"],
+        ["Polyspectral MES Beam",2000000,"2d4",5,1,1,"Fighter",5,"AP25"],
+        ["Sandthrower",50000,"2d4",3,1,1,"Fighter",4,"Flak"],
+        ["Flak Emitter Battery",500000,"2d6",5,3,1,"Fighter",4,"AP10"],    
+      ];
+    
+}

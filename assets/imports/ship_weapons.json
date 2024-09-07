@@ -1,0 +1,68 @@
+[
+    {
+      "weapon_name": "Multifocal Laser",
+      "cost": 100000,
+      "damage": "1d4",
+      "power": 5,
+      "mass": 1,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 4,
+      "qualities": "AP20"
+    },
+    {
+      "weapon_name": "Reaper Battery",
+      "cost": 100000,
+      "damage": "3d4",
+      "power": 4,
+      "mass": 1,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 4,
+      "qualities": "Clumsy"
+    },
+    {
+      "weapon_name": "Fractal Impact Charge",
+      "cost": 200000,
+      "damage": "2d6",
+      "power": 5,
+      "mass": 1,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 4,
+      "qualities": "AP15"
+    },
+    {
+      "weapon_name": "Polyspectral MES Beam",
+      "cost": 2000000,
+      "damage": "2d4",
+      "power": 5,
+      "mass": 1,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 5,
+      "qualities": "AP25"
+    },
+    {
+      "weapon_name": "Sandthrower",
+      "cost": 50000,
+      "damage": "2d4",
+      "power": 3,
+      "mass": 1,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 4,
+      "qualities": "Flak"
+    },
+    {
+      "weapon_name": "Flak Emitter Battery",
+      "cost": 500000,
+      "damage": "2d6",
+      "power": 5,
+      "mass": 3,
+      "hard_point_count": 1,
+      "class": "Fighter",
+      "tech_level": 4,
+      "qualities": "AP10"
+    }    
+  ]
