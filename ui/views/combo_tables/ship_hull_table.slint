@@ -1,0 +1,29 @@
+import {TableView,ShipWeaponListViewItem} from "../../widgets/weapon_table_view.slint";
+import { ComboTableBox } from "../../widgets/ComboTableBox.slint";
+
+export global ShipHullComboAdapter{
+    in property <[[string]]> model:
+        [["Strike Fighter"  , "200,000"     , "5","5" ,"8" ,"1/1"  , "16", "5" , "2" , "1", "Fighter"],
+        ["Shuttle"          , "200,000"     , "3","0" ,"15","1/10" , "11", "3" , "5" , "1", "Fighter"],
+        ["Free Merchant"    , "500,000"     , "3","2" ,"20","1/6"  , "14", "10", "15", "2", "Frigate"],
+        ["Patrol Boat"      , "2,500,000"   , "4","5" ,"25","5/20" , "14", "15", "10", "4", "Frigate"],
+        ["Corvette"         , "4,000,000"   , "2","10","40","10/40", "13", "15", "15", "6", "Frigate"],
+    ];
+    callback selected-index(int);
+
+    function get_strings() -> [[string]]{
+        return [["test"]];
+    }
+} 
+export component ShipHullComboBox {
+    Rectangle {
+        weapon-combo-box := ComboTableBox {
+            columns:["Hull Type","Cost","Speed","Armor","HP","Crew","AC","Power","Mass","Hard.","Class",];
+            column_widths: [100px,100px,70px,70px,60px,80px,70px,60px,100px,60px,100px];
+            choices: ShipHullComboAdapter.model;
+            selected(index) =>{
+                ShipHullComboAdapter.selected-index(index);    
+            }
+        }
+    }
+}

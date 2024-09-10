@@ -1,0 +1,30 @@
+import {TableView,ShipWeaponListViewItem} from "../../widgets/weapon_table_view.slint";
+import { ComboTableBox } from "../../widgets/ComboTableBox.slint";
+
+export global ShipWeaponComboAdapter{
+    in property <[[string]]> model:
+        [["Multifocal Laser", "100000", "1d4","5","1","1", "Fighter", "4", "AP20"],
+        ["Reaper Battery","100000","3d4","4","1","1","Fighter","4","Clumsy"],
+        ["Fractal Impact Charge","200000","2d6","5","1","1","Fighter","4","AP15"],
+        ["Polyspectral MES Beam","2000000","2d4","5","1","1","Fighter","5","AP25"],
+        ["Sandthrower","50000","2d4","3","1","1","Fighter","4","Flak"],
+        ["Flak Emitter Battery","500000","2d6","5","3","1","Fighter","4","AP10"],
+    ];
+    callback selected-index(int);
+
+    function get_strings() -> [[string]]{
+        return [["test"]];
+    }
+} 
+export component ShipWeaponComboBox {
+    Rectangle {
+        weapon-combo-box := ComboTableBox {
+            columns:["Name","Cost","Damage","Power","Mass","HP Count","Class","TL","Qualities",];
+            column_widths: [200px,100px,70px,70px,60px,80px,70px,60px,100px,];
+            choices: ShipWeaponComboAdapter.model;
+            selected(index) =>{
+                ShipWeaponComboAdapter.selected-index(index);    
+            }
+        }
+    }
+}

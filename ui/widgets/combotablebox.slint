@@ -1,0 +1,116 @@
+import { Icons } from "../widgets/styling.slint";
+
+export component ComboTableBox inherits Rectangle {
+    out property <string> selected-string: choices[0][0];
+    in-out property <int> selected-index;
+    in property <[string]> columns;
+    in property <[length]> column_widths;
+    in property <[[string]]> choices;
+
+    callback selected(int);
+
+    height: 32px;
+    border-width: 2px;
+    border-color: black;
+    border-radius: 3px;
+    background:#4f759b ;
+    min-width: label.x + label.width + i.width;
+    horizontal-stretch: 1;
+
+    label := Text{
+        vertical-alignment: center;
+        horizontal-alignment: left;
+        text <=> root.selected-string;
+        font-weight: 700;
+        height: 100%;
+        x:12px;
+        //width: i.x + i.width;
+    }
+
+    i := Image{
+        source: Icons.down;
+        colorize: #a2faa3;
+        height: 40%;
+        width: self.height;
+        x: parent.width - self.width - self.y;
+        y: (parent.height - self.height) / 2;
+    }
+
+    expand := TouchArea{
+        clicked => {popup.show();}
+        width:100%;
+        height: 100%;
+    }
+
+    popup := PopupWindow{
+        y: root.height;
+        x:-data-table.width / 2;
+        width: root.width;
+
+        Rectangle {
+            background: #4f5e85;
+            border-radius: 3px;
+            border-width: 2px;
+        }
+
+        data-table := VerticalLayout {
+            padding: 1px;
+            Rectangle {
+                background: #5d5179;
+                column_layout := HorizontalLayout {
+                    height: 32px;
+                    for col[idx] in root.columns: Text{
+                        vertical-alignment: center;
+                        horizontal-alignment: idx==0? left:center;
+                        font-weight: 500;
+                        font-size: 16px;
+                        min-width: root.column_widths[idx];
+                        text: col;
+                    }
+                }
+            }
+            for row[row-idx] in root.choices: Rectangle {
+                background: determine-background-color(row-idx);//row-area.has-hover ? #a2faa3:#4f759b;
+                HorizontalLayout {
+                    padding: 2px;
+                    height: 32px;
+                    for column[col-idx] in row:Text{
+                        width: column_widths[col-idx];
+                        vertical-alignment: center;
+                        horizontal-alignment: col-idx==0? left:center;
+                        text:column;
+                        color: determine-text-color(row-idx);
+                    }
+                }
+                row-area := TouchArea {
+                    clicked => {
+                        root.selected-index = row-idx;
+                        root.selected-string = row[0];
+                        root.selected(row-idx);
+                    }
+                    width: 100%;
+                    height: 100%;
+                }
+                function determine-background-color(index:int) -> color{
+                    if(row-area.has-hover){
+                        return #a2faa3;
+                    }
+                    else if(index == root.selected-index){
+                        return #6db39c;
+                    }
+                    else{
+                        return #4f759b;
+                    }
+                }
+                function determine-text-color(index:int) -> color{
+                    if(row-area.has-hover || index == root.selected-index){
+                        return #000000;
+                    }
+                    else{
+                        return #ffffff;
+                    }
+                }
+            }
+        }
+    }
+}

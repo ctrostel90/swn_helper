@@ -1,4 +1,12 @@
 import {VerticalBox, HorizontalBox, ComboBox, Button, SpinBox} from "std-widgets.slint";
+import {ShipWeaponComboBox, ShipWeaponComboAdapter} from "./combo_tables/weapon_combo_table.slint";
+export { ShipWeaponComboAdapter }
+
+import {ShipHullComboAdapter,ShipHullComboBox} from "./combo_tables/ship_hull_table.slint";
+export {ShipHullComboAdapter}
+
+import {ShipFittingComboAdapter, ShipFittingComboBox} from "./combo_tables/ship_fitting_table.slint";
+export {ShipFittingComboAdapter}
 
 import { Icons } from "../widgets/styling.slint";
 
@@ -79,22 +87,7 @@ export component ShipBuilderView{
                         text: "Ship Hull:";
                         vertical-alignment: center;
                     }
-                    ship-hull-input := ComboBox {
-                        model: [
-                            "Strike Fighter",
-                            "Corvette",
-                            "Free Merchant",
-                            "Heavy Frigate",
-                            "Battleship",
-                            "Carrier",
-                        ];
-                        selected(new-value) => {
-                            model.ship-hull-type = new-value;
-                        }
-                    }
-                    ship-hull-add-new := Button {
-                        icon: Icons.add;
-                    }
+                    ship-hull-input := ShipHullComboBox{}
                 }
             }
             HorizontalBox {
@@ -230,38 +223,24 @@ export component ShipBuilderView{
             }
         }
         Text {
+            height: 80px;
             text: "Weapons";
-        }
-        HorizontalBox {
-            weapon-one-label := Text {
-                text: "Weapon 1";
-                vertical-alignment: center;
-            }
-            weapon-one-input := ComboBox {
-                model: ["Multifocal Laser", "Sandthrower", "Reaper Battery"];
-                selected(new-value) => {
-                    model.weapon-one = new-value;
-                }
+            HorizontalLayout {
+                ShipWeaponComboBox {}
+                ShipWeaponComboBox {}
             }
         }
-        Button {
-            icon: Icons.add;
-        }
-        HorizontalBox {
-            fitting-one-label := Text {
-                text: "Fitting 1";
-                vertical-alignment: center;
-            }
-            fitting-one-input := ComboBox {
-                model: ["Spike Drive-1", "Fuel Scoops", "Fuel Bunker"];
-                selected(new-value) => {
-                    model.fitting-one = new-value;
-                }
+        
+        fitting-one-label := Text {
+            text: "Fittings";
+            height: 80px;
+            vertical-alignment: center;
+            HorizontalLayout {
+                ShipFittingComboBox {}
+                ShipFittingComboBox {}
             }
         }
-        Button {
-            icon: Icons.add;
-        }
+        
         create-ship-button := Button {
             primary: true;
             text: "Create Ship";

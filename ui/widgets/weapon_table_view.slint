@@ -12,10 +12,132 @@ export struct ShipWeaponListViewItem{
     weapon-tech-level:int,
     weapon-qualities:string,
 }
+export component ShipWeaponTableItemDelegate {
+    in property <bool> editable: true;
 
-component TableView inherits Rectangle {
+    in property <string> weapon-name <=> weapon-name-input.text;
+    in property <string> weapon-cost <=> weapon-cost-input.text;
+    in property <string> weapon-damage <=> weapon-damage-input.text;
+    in property <string> weapon-power <=> weapon-power-input.text;
+    in property <string> weapon-mass <=> weapon-mass-input.text;
+    in property <string> weapon-hard-point-count <=> weapon-hard-point-count-input.text;
+    in property <string> weapon-class <=> weapon-class-input.text;
+    in property <string> weapon-tech-level <=> weapon-tech-level-input.text;
+    in property <string> weapon-qualities <=> weapon-qualities-input.text;
+
+    in property <brush> background;
+    callback clicked;
+
+    in-out property <[length]> column_sizes;
+    layout := Rectangle{
+        background: root.background;
+            HorizontalLayout {
+            col1 := TouchArea {
+                width: root.column_sizes[0];
+                height: 20px;
+                weapon-name-input := TextInput { 
+                    horizontal-alignment: left;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col2 := TouchArea {
+                width: root.column_sizes[1];
+                height: 15px;
+                weapon-cost-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col3 := TouchArea {
+                width: root.column_sizes[2];
+                height: 15px;
+                weapon-damage-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col4 := TouchArea {
+                width: root.column_sizes[3];
+                height: 15px;
+                weapon-power-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col5 := TouchArea {
+                width: root.column_sizes[4];
+                height: 15px;
+                weapon-mass-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col6 := TouchArea {
+                width: root.column_sizes[5];
+                height: 15px;
+                weapon-hard-point-count-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col7 := TouchArea {
+                width: root.column_sizes[6];
+                height: 15px;
+                weapon-class-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col8 := TouchArea {
+                width: root.column_sizes[7];
+                height: 15px;
+                weapon-tech-level-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+            col9 := TouchArea {
+                width: root.column_sizes[8];
+                height: 15px;
+                weapon-qualities-input := TextInput { 
+                    horizontal-alignment: center;
+                    enabled: root.editable;
+                }
+                clicked => {
+                    root.clicked();
+                }
+            }
+        }
+    }
+}
+export component TableView inherits Rectangle {
     in property <[string]> columns;
     in property <[[string]]> values;
+    in property <[ShipWeaponListViewItem]> model;
 
     in property <color> row-color-one;
     in property <color> row-color-two;
@@ -34,6 +156,7 @@ component TableView inherits Rectangle {
 
     VerticalBox {
         padding: 5px;
+        //Columns
         HorizontalLayout {
             padding: 5px; spacing: 5px;
             vertical-stretch: 0;
@@ -75,26 +198,25 @@ component TableView inherits Rectangle {
                 }
             }
         }
-        ListView {
-            for r[idx-outer] in root.values : Rectangle{
-                background: Math.mod(idx-outer,2)==0? row-color-one:row-color-two;
-                HorizontalLayout {
-                    padding: 5px;
-                    spacing: 5px;
-                    for t[idx] in r : HorizontalLayout {
-                        width: root.column_sizes[idx];
-                        TouchArea {
-                            height: 15px;
-                            TextInput { 
-                                horizontal-alignment: idx!=0 ? center: left;
-                                text: t; 
-                                enabled: root.editable;
-                            }
-                            clicked => {
-                                root.row-selected(idx-outer);
-                            }
-                        }
-                    }
+        //Data
+        data-table := ListView {
+            for item[index] in root.model: ShipWeaponTableItemDelegate{
+                column_sizes: root.column_sizes;
+                background: Math.mod(index,2) == 0 ? row-color-one:row-color-two;
+                editable: root.editable;
+
+                weapon-name: item.weapon-name;
+                weapon-cost: item.weapon-cost;
+                weapon-damage: item.weapon-damage;
+                weapon-power: item.weapon-power;
+                weapon-mass: item.weapon-mass;
+                weapon-hard-point-count: item.weapon-hard-point-count;
+                weapon-class: item.weapon-class;
+                weapon-tech-level: item.weapon-tech-level;
+                weapon-qualities: item.weapon-qualities;
+
+                clicked => {
+                    root.row-selected(index);
                 }
             }
         }
@@ -106,48 +228,4 @@ component TableView inherits Rectangle {
             }
         }
     }
-}
-
-export component ShipWeaponTableView inherits TableView {
-    in property <[[ShipWeaponListViewItem]]> model;
-    background: #5d5179;
-    border-color: #4f5e85;
-    border-width: 2px;
-    border-radius: 2px;
-    width: 865px;
-    height: 150px;
-    row-color-one: #4f5e85;
-    row-color-two: #4f759b;
-    column-background:  #728c91;
-    column_sizes: [
-        200px,
-        100px,
-        70px,
-        70px,
-        60px,
-        80px,
-        70px,
-        60px,
-        100px,
-    ];
-    columns: [
-        "Name",
-        "Cost",
-        "Damage",
-        "Power",
-        "Mass",
-        "HP Count",
-        "Class",
-        "TL",
-        "Qualities",
-    ];
-    values:[
-        ["Multifocal Laser",100000, "1d4", 5, 1, 1, "Fighter", 4, "AP20"],
-        ["Reaper Battery",100000,"3d4",4,1,1,"Fighter",4,"Clumsy"],
-        ["Fractal Impact Charge",200000,"2d6",5,1,1,"Fighter",4,"AP15"],
-        ["Polyspectral MES Beam",2000000,"2d4",5,1,1,"Fighter",5,"AP25"],
-        ["Sandthrower",50000,"2d4",3,1,1,"Fighter",4,"Flak"],
-        ["Flak Emitter Battery",500000,"2d6",5,3,1,"Fighter",4,"AP10"],    
-      ];
-    
 }

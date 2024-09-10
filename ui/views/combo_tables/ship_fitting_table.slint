@@ -1,0 +1,29 @@
+import {TableView,ShipWeaponListViewItem} from "../../widgets/weapon_table_view.slint";
+import { ComboTableBox } from "../../widgets/ComboTableBox.slint";
+
+export global ShipFittingComboAdapter{
+    in property <[[string]]> model:[
+        ["Advanced Lab"      , "10,000*"  , "1#","2" ,"Frigate" ,"" ],
+        ["Cargo sleep pods"  , "5,000*"   , "1","1"  ,"Frigate" ,"" ],
+        ["Fuel bunkers"      , "2,000*"   , "0","1"  ,"Fighter" ,"" ],
+        ["Fuel scoops"       , "5,000*"   , "2","1#" ,"Frigate" ,"" ],
+        ["Lifeboats"         , "2,500*"   , "0","1"  ,"Frigate" ," "],
+    ];
+    callback selected-index(int);
+
+    function get_strings() -> [[string]]{
+        return [["test"]];
+    }
+} 
+export component ShipFittingComboBox {
+    Rectangle {
+        weapon-combo-box := ComboTableBox {
+            columns:["Name","Cost","Power","Mass","Class","Effect",];
+            column_widths: [200px,100px,70px,70px,60px,80px];
+            choices: ShipFittingComboAdapter.model;
+            selected(index) =>{
+                ShipFittingComboAdapter.selected-index(index);    
+            }
+        }
+    }
+}
