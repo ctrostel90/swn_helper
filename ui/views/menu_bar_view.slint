@@ -5,6 +5,7 @@ export global MenuBarAdapter{
     callback menu-clicked;
     callback save-clicked;
     callback load-clicked;
+    callback load-hulls-clicked;
 }
 
 export component MenuBar {
@@ -16,23 +17,46 @@ export component MenuBar {
             width: 75px;
             text: "Menu";
             clicked => {
-                menu-clicked();
+                MenuBarAdapter.menu-clicked();
             }
         }
         Button {
             width: 75px;
             text: "Save";
             clicked => {
-                save-clicked();
+                MenuBarAdapter.save-clicked();
             }
         }
-        Button {
+        load-menu := Button {
             width: 75px;
-            text: "Load";
-            clicked => {
-                load-clicked();
+            text: "Load..";
+            clicked => {sub-menu.show();}
+        }
+        
+        sub-menu := PopupWindow{
+            x:load-menu.x;
+            y:load-menu.height + 2px;
+            Rectangle {
+                background: #4f5e85;
+                border-radius: 2px;
+                VerticalLayout {
+                    spacing: 3px;
+                    Button {
+                        text: "Load Ships";
+                        clicked => {
+                            MenuBarAdapter.load-clicked();
+                        }
+                    }
+                    Button {
+                        text: "Load Hull Types";
+                        clicked => {
+                            MenuBarAdapter.load-hulls-clicked();
+                        }
+                    }
+                }   
             }
         }
+        
     }
     function menu-clicked(){
         MenuBarAdapter.menu-clicked();

@@ -82,12 +82,12 @@ pub fn connect_menu_controller(view_handle: &ui::MainWindow, controller: ShipLis
 
 fn map_ship_to_item(ship: ShipModel) -> ui::ShipListViewItem {
     ui::ShipListViewItem {
-        ship_name: ship.name.into(),
-        ship_hull_type: ship.hull.into(),
-        ship_class: ship.class.into(),
+        ship_name: SharedString::from(&ship.name),
+        ship_hull_type: SharedString::from(&ship.hull.name),
+        ship_class: SharedString::from(&ship.hull.class),
         ship_hp: ship.hp as i32,
-        ship_crew_min: ship.crew_minimum as i32,
-        ship_crew_max: ship.crew_maximum as i32,
+        ship_crew_min: ship.get_crew_minimum() as i32,
+        ship_crew_max: ship.get_crew_maximum() as i32,
         ..Default::default()
     }
 }
