@@ -24,13 +24,14 @@ export struct ShipBuilderData {
     ship-npc-cp:int,
     ship-speed:int,
     weapon-fittings:[int],
-    fitting-one:string,
+    fittings:[int],
 }
 
 export global ShipBuilderAdapter{
     callback create(ShipBuilderData);
     callback set_ship(ShipBuilderData);
     callback weapon-selected(int,int);
+    callback fitting-selected(int,int);
 
     in-out property <ShipBuilderData> ship;
     in property <[[string]]> weapon-model;
@@ -222,6 +223,12 @@ export component ShipBuilderView{
                             }
                         }
                     }
+                    HorizontalBox {
+                        ship-hard-point-count-label := Text {
+                            text: "Number Hardpoints:" + model.weapon-fittings.length;
+                            vertical-alignment: center;
+                        }
+                    }
                 }
             }
         }
@@ -248,8 +255,8 @@ export component ShipBuilderView{
             hardpoint-count: ship-npc-cp-input.value;
             model: ShipBuilderAdapter.fittings-model;
             item_selected(fitting-slot-idx,fitting-idx) => {
-                ShipBuilderAdapter.weapon-selected(fitting-slot-idx,fitting-idx);
-                ShipBuilderAdapter.ship.weapon-fittings[fitting-slot-idx] = fitting-idx;
+                ShipBuilderAdapter.fitting-selected(fitting-slot-idx,fitting-idx);
+                ShipBuilderAdapter.ship.fittings[fitting-slot-idx] = fitting-idx;
             }
         }
         
