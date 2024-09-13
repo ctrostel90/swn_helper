@@ -110,7 +110,6 @@ fn connect_with_ship_list_controller(
 //             })
 //         }
 //     });
-
 // }
 fn map_hull_to_item(ship_hull: ShipHullModel) -> ModelRc<slint::SharedString> {
     ModelRc::new(Rc::new(VecModel::from(vec![
@@ -127,10 +126,7 @@ fn map_hull_to_item(ship_hull: ShipHullModel) -> ModelRc<slint::SharedString> {
         slint::SharedString::from(&ship_hull.class),
     ])))
 }
-fn map_weapons_to_item(ship_weapons: Vec<ShipWeaponModel>){
-    
-    
-}
+
 fn map_weapon_to_item(ship_weapon: &ShipWeaponModel) -> ModelRc<slint::SharedString> {
     ModelRc::new(Rc::new(VecModel::from(vec![
         slint::SharedString::from(&ship_weapon.name),
