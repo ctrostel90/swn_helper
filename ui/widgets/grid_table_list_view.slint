@@ -1,11 +1,13 @@
-import {ShipWeaponComboBox} from "./combo_tables/weapon_combo_table.slint";
+import {ComboTableBox} from "combo_table_box.slint";
 
-import {ColorPalette} from "../widgets/styling.slint";
+import {ColorPalette} from "styling.slint";
 
-export component ShipWeaponListView{
-    in property <[[string]]> weapon-model;
+export component GridTableListView {
+    in property <[[string]]> model;
     in property <int> hardpoint-count: 6;
-    property <int> column-limit: 2;
+    in property <int> column-limit: 2;
+    in property <[string]> columns;
+    in property <[length]> column_widths;
 
     //An item was selected. We'll pass back [index of item updated,index of item selected]
     callback item_selected(int,int);
@@ -19,9 +21,11 @@ export component ShipWeaponListView{
                 for indx in Math.ceil(hardpoint-count / column-limit): HorizontalLayout {
                     min-height: 30px;
                     spacing: 5px;
-                    for inner in Math.min(hardpoint-count - indx * column-limit, column-limit): ShipWeaponComboBox {
-                        model: weapon-model;
-                        selected-index(new-idx) => {
+                    for inner in Math.min(hardpoint-count - indx * column-limit, column-limit): ComboTableBox {
+                        column_widths: root.column_widths;
+                        columns: root.columns;
+                        choices: model;
+                        selected(new-idx) => {
                             root.item_selected(indx * column-limit + inner,new-idx);
                         }
                     }
@@ -30,7 +34,7 @@ export component ShipWeaponListView{
             if hardpoint-count == 0: Text {
                 color: ColorPalette.accent-foreground;
                 font-weight: 500;
-                text: "No hardpoints to mount weapons to";
+                text: "No hardpoints to mount to";
             }
         }
     }

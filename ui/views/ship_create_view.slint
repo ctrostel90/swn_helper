@@ -1,6 +1,6 @@
 import {VerticalBox, HorizontalBox, ComboBox, Button, SpinBox} from "std-widgets.slint";
 
-import {ShipWeaponListView } from "weapon_list_view.slint";
+import {ShipWeaponGrid } from "./combo_tables/weapon_combo_table.slint";
 
 import {ShipHullComboAdapter,ShipHullComboBox} from "./combo_tables/ship_hull_table.slint";
 export {ShipHullComboAdapter}
@@ -227,9 +227,9 @@ export component ShipBuilderView{
             text: "Weapons";
             font-size: 16px;
         }
-        ShipWeaponListView{
+        ShipWeaponGrid{
             hardpoint-count: ship-npc-cp-input.value;
-            weapon-model: ShipBuilderAdapter.weapon-model;
+            model: ShipBuilderAdapter.weapon-model;
             item_selected(weapon-slot-idx,weapon-idx) => {
                 ShipBuilderAdapter.weapon-selected(weapon-slot-idx,weapon-idx);
                 ShipBuilderAdapter.ship.weapon-fittings[weapon-slot-idx] = weapon-idx;

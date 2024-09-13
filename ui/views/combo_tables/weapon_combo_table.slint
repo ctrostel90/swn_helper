@@ -1,7 +1,7 @@
-import {TableView,ShipWeaponListViewItem} from "../../widgets/weapon_table_view.slint";
 import { ComboTableBox } from "../../widgets/combo_table_box.slint";
+import { GridTableListView } from "../../widgets/grid_table_list_view.slint";
 
-export component ShipWeaponComboBox {
+export component ShipWeaponGrid{
     in property <[[string]]> model:
         [["Multifocal Laser", "100000", "1d4","5","1","1", "Fighter", "4", "AP20"],
         ["Reaper Battery","100000","3d4","4","1","1","Fighter","4","Clumsy"],
@@ -10,14 +10,20 @@ export component ShipWeaponComboBox {
         ["Sandthrower","50000","2d4","3","1","1","Fighter","4","Flak"],
         ["Flak Emitter Battery","500000","2d6","5","3","1","Fighter","4","AP10"],
     ];
-    callback selected-index(int);
+    in property <int> hardpoint-count:1;
+    in property <int> column-limit:2;
+    callback item_selected(int,int);
     Rectangle {
-        weapon-combo-box := ComboTableBox {
+        weapon-combo-box := GridTableListView {
             columns:["Name","Cost","Damage","Power","Mass","HP Count","Class","TL","Qualities",];
             column_widths: [200px,100px,70px,70px,60px,80px,70px,60px,100px,];
-            choices: model;
-            selected(index) =>{
-                selected-index(index);    
+            
+            hardpoint-count: root.hardpoint-count;
+            column-limit: root.column-limit;
+            
+            model: root.model;
+            item_selected(fitting_slot,fitting_index) =>{
+                root.item_selected(fitting_slot,fitting_index);    
             }
         }
     }
