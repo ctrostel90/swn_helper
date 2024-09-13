@@ -3,10 +3,7 @@ import {VerticalBox, HorizontalBox, ComboBox, Button, SpinBox} from "std-widgets
 import {ShipWeaponGrid } from "./combo_tables/weapon_combo_table.slint";
 import {ShipFittingGrid} from "./combo_tables/ship_fitting_table.slint";
 
-import {ShipHullComboAdapter,ShipHullComboBox} from "./combo_tables/ship_hull_table.slint";
-export {ShipHullComboAdapter}
-
-
+import {ShipHullComboBox} from "./combo_tables/ship_hull_table.slint";
 
 import { Icons } from "../widgets/styling.slint";
 
@@ -30,10 +27,12 @@ export struct ShipBuilderData {
 export global ShipBuilderAdapter{
     callback create(ShipBuilderData);
     callback set_ship(ShipBuilderData);
+    callback hull-selected(int);
     callback weapon-selected(int,int);
     callback fitting-selected(int,int);
 
     in-out property <ShipBuilderData> ship;
+    in property <[[string]]> hull-model;
     in property <[[string]]> weapon-model;
     in property <[[string]]> fittings-model;
     
@@ -91,7 +90,12 @@ export component ShipBuilderView{
                         text: "Ship Hull:";
                         vertical-alignment: center;
                     }
-                    ship-hull-input := ShipHullComboBox{}
+                    ship-hull-input := ShipHullComboBox{
+                        model: ShipBuilderAdapter.hull-model;
+                        selected-index(index) => {
+                            ShipBuilderAdapter.hull-selected(index);
+                        }
+                    }
                 }
             }
             HorizontalBox {

@@ -32,7 +32,8 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
     view_handle
         .global::<ui::ShipBuilderAdapter>()
         .set_weapon_model(ModelRc::new(weapons));
-    view_handle.global::<ui::ShipHullComboAdapter>().set_model(
+    
+    view_handle.global::<ui::ShipBuilderAdapter>().set_hull_model(
         Rc::new(MapModel::new(
             controller.ship_hull_model(),
             map_hull_to_item,
@@ -51,17 +52,10 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
         .global::<ui::ShipBuilderAdapter>()
         .set_fittings_model(ModelRc::new(fittings));
 
-    view_handle.global::<ui::ShipHullComboAdapter>().set_model(
-        Rc::new(MapModel::new(
-            controller.ship_hull_model(),
-            map_hull_to_item,
-        ))
-        .into(),
-    );
-
     controller.on_start_editing_ship({
         let view_handle = view_handle.as_weak();
         let ship_weapon_model = Arc::clone(&controller.ship_weapon_model);
+        let ship_fitting_model = Arc::clone(&controller.ship_fittings_model);
         move |new_ship| {
             view_handle
                 .unwrap()
@@ -69,6 +63,7 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
                 .invoke_set_ship(map_ship_model_to_ship_data(
                     new_ship.clone(),
                     &*ship_weapon_model,
+                    &*&ship_fitting_model,
                 ));
         }
     });
@@ -174,8 +169,10 @@ fn map_fitting_to_item(ship_fitting: &ShipFittingsModel) -> ModelRc<slint::Share
 fn map_ship_model_to_ship_data(
     ship_model: ShipModel,
     weapon_fittings: &Vec<ShipWeaponModel>,
+    ship_fittings: &Vec<ShipFittingsModel>,
 ) -> ui::ShipBuilderData {
     let weapon_list: Vec<&str> = weapon_fittings.iter().map(|x| x.name.as_str()).collect();
+    let fittings_list: Vec<&str> = ship_fittings.iter().map(|x| x.name.as_str()).collect();
     ui::ShipBuilderData {
         ship_name: SharedString::from(&ship_model.name),
         ship_hull_type: SharedString::from(&ship_model.hull.name),
@@ -192,7 +189,10 @@ fn map_ship_model_to_ship_data(
         weapon_fittings: ModelRc::from(Rc::new(VecModel::from(
             ShipEditController::get_weapon_indecies(weapon_fittings, &weapon_list),
         ))),
-        fitting_one: SharedString::from(&ship_model.fitting_one),
+        fittings: ModelRc::from(Rc::new(VecModel::from(
+            ShipEditController::get_fitting_indecies(ship_fittings, &fittings_list),
+        )))
+        
     }
 }
 //Have an Vector of the weapon fittings with all of their data. Need to get the index of said weapon in the weapons list

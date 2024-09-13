@@ -3,7 +3,7 @@ use std::default;
 use std::rc::Rc;
 use std::sync::Arc;
 
-use crate::mvc::{self, ShipModel, ShipWeaponModel};
+use crate::mvc::{self, ShipFittingsModel, ShipModel, ShipWeaponModel};
 
 use crate::Callback;
 //use crate::mvc::traits::ShipModel;
@@ -68,6 +68,23 @@ impl ShipEditController {
                 ship_weapon_model
                     .iter()
                     .position(|w| w.name == weapon)
+                    .unwrap() as i32
+            })
+            .collect()
+    }
+
+    //Search through the weapon list, building an array of the indecies where those weapons exist in the main list array for displaying
+    pub fn get_fitting_indecies(
+        ship_fitting_model: &Vec<ShipFittingsModel>,
+        fittings: &[&str],
+    ) -> Vec<i32> {
+        //todo: this shouldn't be unwrapped here. At this point if the weapon is not found it would return an error
+        fittings
+            .iter()
+            .map(|&fitting| {
+                ship_fitting_model
+                    .iter()
+                    .position(|f| f.name == fitting)
                     .unwrap() as i32
             })
             .collect()
