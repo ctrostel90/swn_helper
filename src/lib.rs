@@ -1,18 +1,17 @@
-
-pub mod ui;
 pub mod mvc;
+pub mod ui;
 
 mod callback;
 pub use callback::*;
 pub use slint::*;
 
-pub fn main(){
+pub fn main() {
     let main_window = init();
 
     main_window.run().unwrap();
 }
 
-fn init() -> ui::MainWindow{
+fn init() -> ui::MainWindow {
     let view_handle = ui::MainWindow::new().unwrap();
 
     let startup_controller = mvc::AppConfig::new(
@@ -20,18 +19,38 @@ fn init() -> ui::MainWindow{
         "D:/rust/swn_helper/assets/imports/ship_weapons.json".into(),
         "D:/rust/swn_helper/assets/imports/ship_hulls.json".into(),
     );
-    let (ship_hull_model,ship_weapon_model) = startup_controller.startup();
+    let (ship_hull_model, ship_weapon_model, ship_fittings_model) = startup_controller.startup();
     let ship_list_controller = mvc::ShipListController::new(mvc::ship_repo());
-    ui::ship_list_adapter::connect(&view_handle,ship_list_controller.clone());
-        
-    let ship_edit_controller = mvc::ShipEditController::new(mvc::MockShipHullRepository::new(ship_hull_model),ship_weapon_model);
+    ui::ship_list_adapter::connect(&view_handle, ship_list_controller.clone());
+
+    let ship_edit_controller = mvc::ShipEditController::new(
+        mvc::MockShipHullRepository::new(ship_hull_model),
+        ship_weapon_model,
+        ship_fittings_model,
+    );
     ui::ship_edit_adapter::connect(&view_handle, ship_edit_controller.clone());
     //ui::ship_edit_adapter::connect_ship_list_controller(&view_handle, ship_list_controller.clone());
-    ui::ship_list_adapter::connect_ship_edit_controller(&view_handle, &ship_list_controller, &ship_edit_controller);
+    ui::ship_list_adapter::connect_ship_edit_controller(
+        &view_handle,
+        &ship_list_controller,
+        &ship_edit_controller,
+    );
 
     let menu_controller = mvc::MenuController::new();
-    ui::menu_adapter::connect_ship_list_controller(&view_handle, menu_controller.clone(), ship_list_controller.clone());
-    ui::ship_list_adapter::connect_menu_controller(&view_handle, ship_list_controller.clone(), menu_controller.clone());
-    ui::ship_edit_adapter::connect_menu_controller(&view_handle, ship_edit_controller.clone(),menu_controller.clone());
+    ui::menu_adapter::connect_ship_list_controller(
+        &view_handle,
+        menu_controller.clone(),
+        ship_list_controller.clone(),
+    );
+    ui::ship_list_adapter::connect_menu_controller(
+        &view_handle,
+        ship_list_controller.clone(),
+        menu_controller.clone(),
+    );
+    ui::ship_edit_adapter::connect_menu_controller(
+        &view_handle,
+        ship_edit_controller.clone(),
+        menu_controller.clone(),
+    );
     view_handle
 }

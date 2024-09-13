@@ -1,11 +1,12 @@
 import {VerticalBox, HorizontalBox, ComboBox, Button, SpinBox} from "std-widgets.slint";
 
 import {ShipWeaponGrid } from "./combo_tables/weapon_combo_table.slint";
+import {ShipFittingGrid} from "./combo_tables/ship_fitting_table.slint";
 
 import {ShipHullComboAdapter,ShipHullComboBox} from "./combo_tables/ship_hull_table.slint";
 export {ShipHullComboAdapter}
 
-import {ShipFittingComboBox} from "./combo_tables/ship_fitting_table.slint";
+
 
 import { Icons } from "../widgets/styling.slint";
 
@@ -33,6 +34,7 @@ export global ShipBuilderAdapter{
 
     in-out property <ShipBuilderData> ship;
     in property <[[string]]> weapon-model;
+    in property <[[string]]> fittings-model;
     
     set_ship(new-ship) =>{
         ship = new-ship;
@@ -227,7 +229,7 @@ export component ShipBuilderView{
             text: "Weapons";
             font-size: 16px;
         }
-        ShipWeaponGrid{
+        ship-weapon-grid := ShipWeaponGrid{
             hardpoint-count: ship-npc-cp-input.value;
             model: ShipBuilderAdapter.weapon-model;
             item_selected(weapon-slot-idx,weapon-idx) => {
@@ -236,13 +238,18 @@ export component ShipBuilderView{
             }
         }
         
-        fitting-one-label := Text {
+        Text {
             text: "Fittings";
+            font-size: 16px;
             height: 80px;
             vertical-alignment: center;
-            HorizontalLayout {
-                ShipFittingComboBox {}
-                ShipFittingComboBox {}
+        }
+        fitting-weapon-grid := ShipWeaponGrid{
+            hardpoint-count: ship-npc-cp-input.value;
+            model: ShipBuilderAdapter.fittings-model;
+            item_selected(fitting-slot-idx,fitting-idx) => {
+                ShipBuilderAdapter.weapon-selected(fitting-slot-idx,fitting-idx);
+                ShipBuilderAdapter.ship.weapon-fittings[fitting-slot-idx] = fitting-idx;
             }
         }
         

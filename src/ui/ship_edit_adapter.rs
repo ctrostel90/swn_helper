@@ -5,8 +5,7 @@ use std::sync::Arc;
 
 use crate::{
     mvc::{
-        MenuController, ShipEditController, ShipHullModel, ShipListController, ShipModel,
-        ShipWeaponModel,
+        MenuController, ShipEditController, ShipFittingsModel, ShipHullModel, ShipListController, ShipModel, ShipWeaponModel
     },
     ui,
 };
@@ -24,8 +23,8 @@ fn connect_with_controller(
 
 pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
     let arc_ship_weapon_model = Arc::clone(&controller.ship_weapon_model);
-    let cloned_weaopns:Vec<ShipWeaponModel> = (*arc_ship_weapon_model).iter().cloned().collect();
-    let weapons = VecModel::from(cloned_weaopns
+    let cloned_weapons:Vec<ShipWeaponModel> = (*arc_ship_weapon_model).iter().cloned().collect();
+    let weapons = VecModel::from(cloned_weapons
         .iter()
         .map(|weapon| map_weapon_to_item(weapon))
         .collect::<Vec<ModelRc<slint::SharedString>>>());
@@ -33,6 +32,25 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
     view_handle
         .global::<ui::ShipBuilderAdapter>()
         .set_weapon_model(ModelRc::new(weapons));
+    view_handle.global::<ui::ShipHullComboAdapter>().set_model(
+        Rc::new(MapModel::new(
+            controller.ship_hull_model(),
+            map_hull_to_item,
+        ))
+        .into(),
+    );
+
+    let arc_ship_fittings_model = Arc::clone(&controller.ship_fittings_model);
+    let cloned_fittings:Vec<ShipFittingsModel> = (*arc_ship_fittings_model).iter().cloned().collect();
+    let fittings = VecModel::from(cloned_fittings
+        .iter()
+        .map(|fitting| map_fitting_to_item(fitting))
+        .collect::<Vec<ModelRc<slint::SharedString>>>());
+    
+    view_handle
+        .global::<ui::ShipBuilderAdapter>()
+        .set_fittings_model(ModelRc::new(fittings));
+
     view_handle.global::<ui::ShipHullComboAdapter>().set_model(
         Rc::new(MapModel::new(
             controller.ship_hull_model(),
@@ -111,6 +129,7 @@ fn connect_with_ship_list_controller(
 //         }
 //     });
 // }
+
 fn map_hull_to_item(ship_hull: ShipHullModel) -> ModelRc<slint::SharedString> {
     ModelRc::new(Rc::new(VecModel::from(vec![
         slint::SharedString::from(&ship_hull.name),
@@ -138,6 +157,17 @@ fn map_weapon_to_item(ship_weapon: &ShipWeaponModel) -> ModelRc<slint::SharedStr
         slint::SharedString::from(&ship_weapon.class),
         slint::format!("{}", ship_weapon.tech_level),
         slint::SharedString::from(&ship_weapon.qualities),
+    ])))
+}
+
+fn map_fitting_to_item(ship_fitting: &ShipFittingsModel) -> ModelRc<slint::SharedString> {
+    ModelRc::new(Rc::new(VecModel::from(vec![
+        slint::SharedString::from(&ship_fitting.name),
+        slint::SharedString::from(&ship_fitting.cost),
+        slint::SharedString::from(&ship_fitting.power),
+        slint::SharedString::from(&ship_fitting.mass),
+        slint::SharedString::from(&ship_fitting.class),
+        slint::SharedString::from(&ship_fitting.effect),
     ])))
 }
 

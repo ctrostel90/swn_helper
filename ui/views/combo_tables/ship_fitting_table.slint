@@ -1,6 +1,7 @@
 import { ComboTableBox } from "../../widgets/combo_table_box.slint";
+import { GridTableListView } from "../../widgets/grid_table_list_view.slint";
 
-export component ShipFittingComboBox {
+export component ShipFittingGrid {
     in property <[[string]]> model:[
         ["Advanced Lab"      , "10,000*"  , "1#","2" ,"Frigate" ,"" ],
         ["Cargo sleep pods"  , "5,000*"   , "1","1"  ,"Frigate" ,"" ],
@@ -8,14 +9,20 @@ export component ShipFittingComboBox {
         ["Fuel scoops"       , "5,000*"   , "2","1#" ,"Frigate" ,"" ],
         ["Lifeboats"         , "2,500*"   , "0","1"  ,"Frigate" ," "],
     ];
-    callback selected-index(int);
+    in property <int> hardpoint-count:3;
+    in property <int> column-limit:2;
+    callback item_selected(int,int);
     Rectangle {
-        weapon-combo-box := ComboTableBox {
+        weapon-combo-box := GridTableListView {
             columns:["Name","Cost","Power","Mass","Class","Effect",];
             column_widths: [200px,100px,70px,70px,60px,80px];
-            choices: root.model;
-            selected(index) =>{
-                root.selected-index(index);    
+            
+            hardpoint-count: root.hardpoint-count;
+            column-limit: root.column-limit;
+
+            model: root.model;
+            item_selected(fitting_slot,fitting_index) =>{
+                root.item_selected(fitting_slot,fitting_index);    
             }
         }
     }

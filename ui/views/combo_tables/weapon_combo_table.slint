@@ -10,7 +10,7 @@ export component ShipWeaponGrid{
         ["Sandthrower","50000","2d4","3","1","1","Fighter","4","Flak"],
         ["Flak Emitter Battery","500000","2d6","5","3","1","Fighter","4","AP10"],
     ];
-    in property <int> hardpoint-count:1;
+    in property <int> hardpoint-count:3;
     in property <int> column-limit:2;
     callback item_selected(int,int);
     Rectangle {
@@ -20,7 +20,7 @@ export component ShipWeaponGrid{
             
             hardpoint-count: root.hardpoint-count;
             column-limit: root.column-limit;
-            
+
             model: root.model;
             item_selected(fitting_slot,fitting_index) =>{
                 root.item_selected(fitting_slot,fitting_index);    
