@@ -1,6 +1,6 @@
 use serde::{Serialize,Deserialize};
 
-#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ShipHullModel {
     pub name: String,
     pub cost: i64,
@@ -19,5 +19,24 @@ pub struct ShipHullModel {
 impl ShipHullModel{
     pub fn get_crew(&self) -> String {
         format!("{}/{}", self.crew_minimum, self.crew_maximum)
+    }
+}
+
+impl Default for ShipHullModel{
+    fn default() -> Self {
+        Self{
+            name:"".into(),
+            cost:0,
+            speed:0,
+            armor:0,
+            hp:0,
+            crew_minimum:0,
+            crew_maximum:0,
+            ac:0,
+            power:0,
+            mass:0,
+            hard_points:0,
+            class:"Fighter".into(),
+        }
     }
 }

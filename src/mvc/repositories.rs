@@ -7,6 +7,8 @@ pub use mock_ship_repository::*;
 mod mock_ship_hull_repository;
 pub use mock_ship_hull_repository::*;
 
+use super::ShipWeaponModel;
+
 pub fn ship_repo() -> impl traits::ShipRepository + Clone{
     MockShipRepository::new(vec![
         ShipModel{
@@ -27,7 +29,17 @@ pub fn ship_repo() -> impl traits::ShipRepository + Clone{
             },
             hp:12,
             npc_cp_count: 12,
-            weapon_one: "Multifocal Laser".into(),
+            weapon_fittings: vec![ShipWeaponModel{
+                name: "Lightning Charge Mantle".into(),
+                cost: 4000000,
+                damage: "1d20".into(),
+                power: 15,
+                mass: 5,
+                hard_points: 2,
+                class: "Capital".into(),
+                tech_level: 4,
+                qualities: "AP 5, Cloud".into()
+            }],
             fitting_one: "Spike Drive-1".into(),
         },]
     )

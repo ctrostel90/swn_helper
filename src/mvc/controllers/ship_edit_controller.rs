@@ -1,22 +1,29 @@
+use std::default;
 use std::rc::Rc;
+use std::sync::Arc;
 use slint::{Model,ModelNotify,ModelRc,ModelTracker,};
 
-use crate::mvc::{self, ShipModel};
+use crate::mvc::{self, ShipModel, ShipWeaponModel};
 
 use crate::Callback;
 //use crate::mvc::traits::ShipModel;
 
 #[derive(Clone)]
 pub struct ShipEditController{
+    //current_ship:ShipModel,
     ship_hull_model:ShipHullModel,
+    pub ship_weapon_model:Arc<Vec<mvc::ShipWeaponModel>>,
     start_edit_ship_callback:Rc<Callback<ShipModel,()>>,
+    update_ship_weapon_model_callback:Rc<Callback<Vec<mvc::ShipWeaponModel>,()>>,
 }
 
 impl ShipEditController{
-    pub fn new(repo: impl mvc::traits::ShipHullRepository + 'static) -> Self{
+    pub fn new(repo: impl mvc::traits::ShipHullRepository + 'static, ship_weapon_model:Vec<mvc::ShipWeaponModel>) -> Self{
         Self{ 
             ship_hull_model: ShipHullModel::new(repo),
-            start_edit_ship_callback: Rc::new(Callback::default())
+            ship_weapon_model: Arc::from(ship_weapon_model),
+            start_edit_ship_callback: Rc::new(Callback::default()),
+            update_ship_weapon_model_callback: Rc::new(Callback::default()),
         }
     }
 
@@ -43,6 +50,15 @@ impl ShipEditController{
 
     pub fn create_ship_hull(&self, new_ship_hull:mvc::models::ShipHullModel) {
         self.ship_hull_model.push_ship_hull(new_ship_hull);
+    }
+
+    //Search through the weapon list, building an array of the indecies where those weapons exist in the main list array for displaying
+    pub fn get_weapon_indecies(ship_weapon_model:&Vec<ShipWeaponModel>, weapons: &[&str]) -> Vec<i32>{
+        //todo: this shouldn't be unwrapped here. At this point if the weapon is not found it would return an error
+        weapons
+            .iter()
+            .map(|&weapon| ship_weapon_model.iter().position(|w| w.name == weapon).unwrap() as i32)
+            .collect()
     }
 
 }

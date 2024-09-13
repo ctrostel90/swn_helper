@@ -1,4 +1,5 @@
 use slint::*;
+use std::rc::Rc;
 
 use crate::{
     mvc::{
@@ -54,21 +55,3 @@ pub fn connect_ship_list_controller(view_handle: &ui::MainWindow, controller: Me
 //     }
 // }
 
-fn map_ship_model_to_ship_data(ship_model: ShipModel) -> ui::ShipBuilderData{
-    ui::ShipBuilderData{
-        ship_name: SharedString::from(&ship_model.name),
-        ship_hull_type: SharedString::from(&ship_model.hull.name),
-        ship_class: SharedString::from(&ship_model.hull.class),
-        ship_hp: ship_model.hp as i32,
-        ship_crew_min: ship_model.hull.crew_minimum as i32,
-        ship_crew_max: ship_model.hull.crew_maximum as i32,
-        ship_armor: ship_model.get_armor() as i32,
-        ship_ac: ship_model.get_ac() as i32,
-        ship_power: ship_model.get_power() as i32,
-        ship_mass: ship_model.get_mass() as i32,
-        ship_npc_cp: ship_model.npc_cp_count as i32,
-        ship_speed: ship_model.get_speed() as i32,
-        weapon_one: SharedString::from(&ship_model.weapon_one),
-        fitting_one: SharedString::from(&ship_model.fitting_one),
-    }
-}

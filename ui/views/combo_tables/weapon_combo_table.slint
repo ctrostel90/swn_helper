@@ -1,7 +1,7 @@
 import {TableView,ShipWeaponListViewItem} from "../../widgets/weapon_table_view.slint";
 import { ComboTableBox } from "../../widgets/combo_table_box.slint";
 
-export global ShipWeaponComboAdapter{
+export component ShipWeaponComboBox {
     in property <[[string]]> model:
         [["Multifocal Laser", "100000", "1d4","5","1","1", "Fighter", "4", "AP20"],
         ["Reaper Battery","100000","3d4","4","1","1","Fighter","4","Clumsy"],
@@ -11,19 +11,13 @@ export global ShipWeaponComboAdapter{
         ["Flak Emitter Battery","500000","2d6","5","3","1","Fighter","4","AP10"],
     ];
     callback selected-index(int);
-
-    function get_strings() -> [[string]]{
-        return [["test"]];
-    }
-} 
-export component ShipWeaponComboBox {
     Rectangle {
         weapon-combo-box := ComboTableBox {
             columns:["Name","Cost","Damage","Power","Mass","HP Count","Class","TL","Qualities",];
             column_widths: [200px,100px,70px,70px,60px,80px,70px,60px,100px,];
-            choices: ShipWeaponComboAdapter.model;
+            choices: model;
             selected(index) =>{
-                ShipWeaponComboAdapter.selected-index(index);    
+                selected-index(index);    
             }
         }
     }

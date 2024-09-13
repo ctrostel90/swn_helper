@@ -1,13 +1,15 @@
 use crate::mvc::ShipHullModel;
 use serde::{Deserialize, Serialize};
 
+use super::ShipWeaponModel;
+
 #[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ShipModel {
     pub name: String,
     pub hull: ShipHullModel,
     pub hp: i64,
     pub npc_cp_count: i64,
-    pub weapon_one: String,
+    pub weapon_fittings: Vec<ShipWeaponModel>,
     pub fitting_one: String,
 }
 
@@ -17,7 +19,7 @@ impl ShipModel {
         ship_hull: ShipHullModel,
         ship_hp: i64,
         ship_npc_cp_count: i64,
-        ship_weapon_one: String,
+        ship_weapon_fittings: Vec<ShipWeaponModel>,
         ship_fitting_one: String,
     ) -> Self {
         Self {
@@ -25,7 +27,7 @@ impl ShipModel {
             hull: ship_hull,
             hp: ship_hp,
             npc_cp_count: ship_npc_cp_count,
-            weapon_one: ship_weapon_one,
+            weapon_fittings: ship_weapon_fittings,
             fitting_one: ship_fitting_one,
         }
     }
@@ -43,6 +45,9 @@ impl ShipModel {
     }
     pub fn get_number_hard_points(&self) -> i64 {
         self.hull.hard_points
+    }
+    pub fn get_remaining_hard_points(&self) -> i64{
+        self.hull.hard_points - (self.weapon_fittings.iter().map(|x| x.hard_points).sum::<i64>())
     }
     pub fn get_armor(&self) -> i64 {
         self.hull.armor

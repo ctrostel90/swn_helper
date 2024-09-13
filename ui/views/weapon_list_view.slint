@@ -1,0 +1,41 @@
+import {ShipWeaponComboBox} from "./combo_tables/weapon_combo_table.slint";
+
+import {ColorPalette} from "../widgets/styling.slint";
+
+export component ShipWeaponListView{
+    in property <[[string]]> weapon-model;
+    in property <int> hardpoint-count: 6;
+    property <int> column-limit: 2;
+
+    //An item was selected. We'll pass back [index of item updated,index of item selected]
+    callback item_selected(int,int);
+
+    VerticalLayout {
+        max-height: Math.ceil(hardpoint-count / column-limit) * 40px;
+        Rectangle {
+            max-height: Math.ceil(hardpoint-count / column-limit) * 40px;
+            VerticalLayout {
+                spacing: 5px;
+                for indx in Math.ceil(hardpoint-count / column-limit): HorizontalLayout {
+                    min-height: 30px;
+                    spacing: 5px;
+                    for inner in Math.min(hardpoint-count - indx * column-limit, column-limit): ShipWeaponComboBox {
+                        model: weapon-model;
+                        selected-index(new-idx) => {
+                            root.item_selected(indx * column-limit + inner,new-idx);
+                        }
+                    }
+                }
+            }
+            if hardpoint-count == 0: Text {
+                color: ColorPalette.accent-foreground;
+                font-weight: 500;
+                text: "No hardpoints to mount weapons to";
+            }
+        }
+    }
+}
+
+
+
+
