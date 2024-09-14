@@ -5,16 +5,17 @@ use std::sync::Arc;
 
 use crate::mvc::{self, ShipFittingsModel, ShipModel, ShipWeaponModel};
 
-use crate::Callback;
+use crate::{callback, Callback};
 //use crate::mvc::traits::ShipModel;
 
 #[derive(Clone)]
 pub struct ShipEditController {
-    //current_ship:ShipModel,
+    current_ship:ShipModel,
     ship_hull_model: ShipHullModel,
     pub ship_weapon_model: Arc<Vec<mvc::ShipWeaponModel>>,
     pub ship_fittings_model: Arc<Vec<mvc::ShipFittingsModel>>,
     start_edit_ship_callback: Rc<Callback<ShipModel, ()>>,
+    ship_updated_callback: Rc<callback<ShipModel,()>>,
 }
 
 impl ShipEditController {
@@ -24,10 +25,12 @@ impl ShipEditController {
         ship_fittings_model: Vec<mvc::ShipFittingsModel>,
     ) -> Self {
         Self {
+            current_ship: ShipModel::default(),
             ship_hull_model: ShipHullModel::new(repo),
             ship_weapon_model: Arc::from(ship_weapon_model),
             ship_fittings_model: Arc::from(ship_fittings_model),
             start_edit_ship_callback: Rc::new(Callback::default()),
+            ship_updated_callback: Rc::new(Callback::default()),
         }
     }
 
@@ -41,6 +44,13 @@ impl ShipEditController {
         });
     }
 
+    pub fn set_hull_model(&mut self, index:usize) -> Result<bool,()>{
+        match self.ship_hull_model.get_hull(index){
+            Some(hull) => self.current_ship.hull = hull,
+            None => println!("No hull found")
+        }
+        Ok(true)
+    }
     pub fn ship_hull_model(&self) -> ModelRc<mvc::ShipHullModel> {
         ModelRc::new(self.ship_hull_model.clone())
     }

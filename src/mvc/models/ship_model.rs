@@ -3,7 +3,7 @@ use serde::{Deserialize, Serialize};
 
 use super::ShipWeaponModel;
 
-#[derive(Clone, Default, Debug, PartialEq, Serialize, Deserialize)]
+#[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct ShipModel {
     pub name: String,
     pub hull: ShipHullModel,
@@ -63,5 +63,19 @@ impl ShipModel {
     }
     pub fn get_speed(&self) -> i64 {
         self.hull.speed
+    }
+}
+
+impl Default for ShipModel{
+    fn default() -> Self {
+        Self{
+            name: "".into(),
+            hull: ShipHullModel::default(),
+            hp: 0,
+            npc_cp_count: 0,
+            weapon_fittings: vec![ShipWeaponModel::default()],
+            fitting_one: "".into(),
+        }
+
     }
 }

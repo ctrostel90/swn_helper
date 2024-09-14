@@ -67,6 +67,16 @@ pub fn connect(view_handle: &ui::MainWindow, controller: ShipEditController) {
                 ));
         }
     });
+
+    connect_with_controller(view_handle, &controller, 
+    move|adapter,mut controller: ShipEditController|{
+        adapter.on_hull_selected(move |index|{
+            match controller.set_hull_model(index as usize){
+                Err(e) => println!("Invalid hull index"),
+                Ok(val)=> {}
+            }
+        })
+    })
 }
 
 fn connect_with_menu_controller(
